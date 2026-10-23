@@ -1,0 +1,106 @@
+name: validate
+on:
+  pull_request:
+  push:
+    branches: [main]
+    tags: ["v*"]
+permissions:
+  contents: read
+jobs:
+  public-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Public-content audit tests
+        run: python3 -m unittest tests/test_public_audit.py -v
+      - name: Public-content audit (generic patterns + private denylist secret)
+        env:
+          PUBLIC_AUDIT_DENYLIST: ${{ secrets.PUBLIC_AUDIT_DENYLIST }}
+        run: |
+          if [ "${GITHUB_EVENT_NAME}" = "pull_request" ] && [ -z "${PUBLIC_AUDIT_DENYLIST}" ]; then
+            # secrets are not passed to fork PRs; the generic set still runs
+            python3 scripts/public_audit.py
+          else
+            python3 scripts/public_audit.py --require-extra
+          fi
+
+  manifests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Manifests, notice copies, references and pins match the source
+        run: |
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            python3 scripts/gen_manifests.py --check --tag "${GITHUB_REF_NAME}"
+          else
+            python3 scripts/gen_manifests.py --check
+          fi
+      - name: Agent Skills spec (one exact, scoped exception)
+        run: |
+          pip install "skills-ref==0.1.1" "jsonschema==4.26.0"
+          # Only these two skills may carry disable-model-invocation (a Claude Code /
+          # Cursor key the strict validator rejects). Their only allowed error is
+          # this exact line. Any other error, or this one anywhere else, fails.
+          TOLERATED="  - Unexpected fields in frontmatter: disable-model-invocation. Only ['allowed-tools', 'compatibility', 'description', 'license', 'metadata', 'name'] are allowed."
+          rc=0
+          for d in plugins/hefesto-code-gate/skills/*/; do
+            name=$(basename "$d")
+            if out=$(agentskills validate "$d" 2>&1); then echo "$out"; continue; fi
+            echo "$out"
+            errors=$(printf '%s\n' "$out" | grep -- '^  - ' || true)
+            case "$name" in
+              hefesto-fix-verify|hefesto-gate-setup)
+                if [ "$errors" = "$TOLERATED" ]; then echo "  (tolerated for $name)"; continue; fi ;;
+            esac
+            rc=1
+          done
+          exit $rc
+      - name: Codex ZIP (key stripped) passes the strict validator with no exception
+        run: |
+          python3 scripts/gen_manifests.py --codex-zip dist/hefesto-code-gate-codex.zip
+          mkdir -p dist/codex && cd dist/codex && python3 -m zipfile -e ../hefesto-code-gate-codex.zip .
+          for d in skills/*/; do agentskills validate "$d"; done
+          ! grep -rl '^disable-model-invocation:' skills
+      - uses: actions/upload-artifact@v7
+        with:
+          name: codex-zip
+          path: dist/hefesto-code-gate-codex.zip
+      - name: Agent Plugins schema
+        run: |
+          python3 - <<'PY'
+          import json, urllib.request, jsonschema
+          s = json.load(urllib.request.urlopen("https://agent-plugins.org/schemas/1.0.0/plugin.schema.json"))
+          jsonschema.validate(json.load(open("plugins/hefesto-code-gate/plugin.json")), s)
+          print("plugin.json OK")
+          PY
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+      - name: Claude plugin validate --strict (Claude Code 2.1.308, pinned)
+        run: |
+          # Anthropic's directory reads icon, documentationUrl, supportUrl and
+          # privacyPolicyUrl from .claude-plugin/plugin.json for the listing:
+          #   https://code.claude.com/docs/en/plugins-reference#directory-listing-fields
+          # Field table and validate behavior (--strict turns warnings into failures):
+          #   https://code.claude.com/docs/en/plugins-reference#fields
+          #   https://code.claude.com/docs/en/plugins-reference#validate-the-manifest
+          # Claude Code v2.1.281+ no longer reports those fields as unknown, so
+          # --strict passes. Versions 2.1.281+ require Node.js 22. Re-check
+          # --strict on every Claude Code version bump.
+          npm install -g @anthropic-ai/claude-code@2.1.308
+          claude --version
+          claude plugin validate --strict ./plugins/hefesto-code-gate
+          claude plugin validate --strict .
+
+  dogfood:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: artvepa80/Agents-Hefesto@v4
+        with:
+          target: .
+          fail_on: HIGH
+          sarif: false
