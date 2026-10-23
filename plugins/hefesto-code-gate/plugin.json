@@ -1,0 +1,48 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "hefesto-code-gate",
+  "version": "1.0.0",
+  "description": "Run the open-source HefestoAI CLI on a PR, diff or repo, triage each finding against the code, fix the real ones with proof, and add the gate to CI.",
+  "author": {
+    "name": "Narapa LLC",
+    "url": "https://hefestoai.narapallc.com"
+  },
+  "homepage": "https://github.com/artvepa80/hefesto-code-gate",
+  "repository": "https://github.com/artvepa80/hefesto-code-gate",
+  "license": "MIT",
+  "keywords": [
+    "code-quality",
+    "security",
+    "quality-gate",
+    "ci",
+    "pre-commit",
+    "hefestoai"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Hefesto Code Gate",
+        "shortDescription": "Real findings, verified fixes",
+        "longDescription": "Runs the open-source HefestoAI CLI (hefesto-ai on PyPI) locally on a pull request, a diff or a whole repository. Each HIGH or CRITICAL finding is checked against the surrounding code and labeled real, doubtful or false positive with a reason. Real findings can be fixed with a minimal patch that is re-verified with the CLI and the repo's tests. Also prepares a GitHub Actions workflow for CI. Limits: no style review; no XSS, package-existence or dependency (SCA) checks; nothing is pushed or posted without the user's yes. The CLI sends usage events to PostHog by default (a random install ID, no code, paths or findings) and checks pypi.org for updates; the setup skill shows how to turn this off before the first run.",
+        "developerName": "Narapa LLC",
+        "category": "Developer Tools",
+        "capabilities": [],
+        "websiteURL": "https://github.com/artvepa80/hefesto-code-gate",
+        "supportURL": "https://github.com/artvepa80/hefesto-code-gate/issues",
+        "privacyPolicyURL": "https://hefestoai.narapallc.com/privacy",
+        "defaultPrompt": [
+          "Check this PR with Hefesto and tell me what is real.",
+          "Fix the worst real Hefesto finding and prove it.",
+          "Add the Hefesto gate to CI for this repo."
+        ],
+        "brandColor": "#1F5FBF",
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/logo.png"
+      },
+      "onboardingSkill": "./skills/hefesto-gate-setup/SKILL.md",
+      "publication": {
+        "release_notes": "v1.0.0"
+      }
+    }
+  }
+}
