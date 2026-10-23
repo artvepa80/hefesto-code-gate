@@ -1,0 +1,5 @@
+interface:
+  display_name: "Hefesto Fix & Verify"
+  short_description: "Fix one real finding, with proof"
+policy:
+  allow_implicit_invocation: false

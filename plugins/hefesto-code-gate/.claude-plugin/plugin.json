@@ -1,0 +1,25 @@
+{
+  "name": "hefesto-code-gate",
+  "displayName": "Hefesto Code Gate",
+  "version": "1.0.0",
+  "description": "Run the open-source HefestoAI CLI on a PR, diff or repo, triage each finding against the code, fix the real ones with proof, and add the gate to CI.",
+  "author": {
+    "name": "Narapa LLC",
+    "url": "https://hefestoai.narapallc.com"
+  },
+  "homepage": "https://github.com/artvepa80/hefesto-code-gate",
+  "repository": "https://github.com/artvepa80/hefesto-code-gate",
+  "license": "MIT",
+  "keywords": [
+    "code-quality",
+    "security",
+    "quality-gate",
+    "ci",
+    "pre-commit",
+    "hefestoai"
+  ],
+  "icon": "./assets/logo.png",
+  "documentationUrl": "https://github.com/artvepa80/hefesto-code-gate#readme",
+  "supportUrl": "https://github.com/artvepa80/hefesto-code-gate/issues",
+  "privacyPolicyUrl": "https://hefestoai.narapallc.com/privacy"
+}
