@@ -4,7 +4,7 @@ Agent skills that run the open-source [HefestoAI](https://github.com/artvepa80/A
 
 ## Install
 
-- Claude Code: `/plugin install hefesto-code-gate --marketplace artvepa80/hefesto-code-gate`
+- Claude Code: `/plugin marketplace add artvepa80/hefesto-code-gate`, then `/plugin install hefesto-code-gate@hefestoai`
 - Codex: `codex plugin marketplace add artvepa80/hefesto-code-gate`, then install from the Plugins Directory
 - Cursor: Customize → From GitHub Repository → `artvepa80/hefesto-code-gate`
 

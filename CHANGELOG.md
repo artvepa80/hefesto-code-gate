@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- The plugin README now uses the two-step Claude Code install (`/plugin marketplace add`, then `/plugin install hefesto-code-gate@hefestoai`), matching the root README; it works on older Claude Code versions too.
+
 ## [1.0.0] - 2026-10-23
 
 ### Changed
