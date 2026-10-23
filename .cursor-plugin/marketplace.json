@@ -1,0 +1,23 @@
+{
+  "name": "hefesto-code-gate",
+  "owner": {
+    "name": "Narapa LLC"
+  },
+  "description": "Run the open-source HefestoAI CLI on a PR, diff or repo, triage each finding against the code, fix the real ones with proof, and add the gate to CI.",
+  "version": "1.0.0",
+  "logo": "plugins/hefesto-code-gate/assets/logo.svg",
+  "metadata": {
+    "description": "HefestoAI agent skills by Narapa LLC",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "hefesto-code-gate",
+      "source": "plugins/hefesto-code-gate",
+      "description": "Run the open-source HefestoAI CLI on a PR, diff or repo, triage each finding against the code, fix the real ones with proof, and add the gate to CI.",
+      "version": "1.0.0",
+      "logo": "assets/logo.svg",
+      "category": "Developer Tools"
+    }
+  ]
+}

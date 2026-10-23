@@ -1,0 +1,61 @@
+{
+  "version": "1.0.0",
+  "cli_requirement": "hefesto-ai>=4.20.2,<5",
+  "marketplace": {
+    "name": "hefestoai",
+    "cursor_name": "hefesto-code-gate",
+    "display_name": "HefestoAI",
+    "owner": "Narapa LLC",
+    "description": "HefestoAI agent skills by Narapa LLC"
+  },
+  "plugin": {
+    "dir": "plugins/hefesto-code-gate",
+    "name": "hefesto-code-gate",
+    "display_name": "Hefesto Code Gate",
+    "description": "Run the open-source HefestoAI CLI on a PR, diff or repo, triage each finding against the code, fix the real ones with proof, and add the gate to CI.",
+    "short_description": "Real findings, verified fixes",
+    "long_description": "Runs the open-source HefestoAI CLI (hefesto-ai on PyPI) locally on a pull request, a diff or a whole repository. Each HIGH or CRITICAL finding is checked against the surrounding code and labeled real, doubtful or false positive with a reason. Real findings can be fixed with a minimal patch that is re-verified with the CLI and the repo's tests. Also prepares a GitHub Actions workflow for CI. Limits: no style review; no XSS, package-existence or dependency (SCA) checks; nothing is pushed or posted without the user's yes. The CLI sends usage events to PostHog by default (a random install ID, no code, paths or findings) and checks pypi.org for updates; the setup skill shows how to turn this off before the first run.",
+    "author": {
+      "name": "Narapa LLC",
+      "url": "https://hefestoai.narapallc.com"
+    },
+    "repository": "https://github.com/artvepa80/hefesto-code-gate",
+    "license": "MIT",
+    "keywords": [
+      "code-quality",
+      "security",
+      "quality-gate",
+      "ci",
+      "pre-commit",
+      "hefestoai"
+    ],
+    "category": "Developer Tools",
+    "privacy_policy_url": "https://hefestoai.narapallc.com/privacy",
+    "brand_color": "#1F5FBF",
+    "default_prompts": [
+      "Check this PR with Hefesto and tell me what is real.",
+      "Fix the worst real Hefesto finding and prove it.",
+      "Add the Hefesto gate to CI for this repo."
+    ],
+    "onboarding_skill": "hefesto-gate-setup"
+  },
+  "cli_floor": "4.20.2",
+  "telemetry": {
+    "posthog_ip_discard": "on",
+    "_comment_ip": "pending | on | off. Set after checking the PostHog project setting 'Discard client IP data'. Tag builds fail while pending.",
+    "update_check_optout": null,
+    "_comment_update": "null while the CLI floor has no switch for the pypi.org check; set to the env var name (HEFESTO_NO_UPDATE_CHECK) when the floor is raised to the release that adds it."
+  },
+  "references": {
+    "engine_repo": "artvepa80/Agents-Hefesto",
+    "files": {
+      "skill/issue_types.md": "plugins/hefesto-code-gate/skills/hefesto-gate/references/issue_types.md"
+    }
+  },
+  "pins": {
+    "actions/checkout": {
+      "tag": "v7.0.1",
+      "commit": "3d3c42e5aac5ba805825da76410c181273ba90b1"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "hefestoai",
+  "interface": {
+    "displayName": "HefestoAI"
+  },
+  "plugins": [
+    {
+      "name": "hefesto-code-gate",
+      "source": {
+        "source": "local",
+        "path": "./plugins/hefesto-code-gate"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}
