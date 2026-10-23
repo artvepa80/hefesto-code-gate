@@ -20,7 +20,7 @@ Agent skills that run the open-source [HefestoAI](https://github.com/artvepa80/A
 
 ## What runs, what is sent, what is written
 
-- Installs `hefesto-ai>=4.20.2,<5` from PyPI into `~/.hefesto-venv`. Analysis runs locally; your code is not uploaded.
+- Installs `hefesto-ai>=4.20.3,<5` from PyPI into `~/.hefesto-venv`. Analysis runs locally; your code is not uploaded.
 - The skills do not relay upgrade or pricing messages that the CLI may print.
 - Telemetry from the CLI (the skills show this before the first run and before writing hooks or CI):
 
@@ -31,7 +31,7 @@ Agent skills that run the open-source [HefestoAI](https://github.com/artvepa80/A
 - On the first run the CLI only prints this notice and sends nothing.
 - Turn it off with `hefesto telemetry disable` (your user account on this machine, including git hooks), or `HEFESTO_TELEMETRY=0` or `DO_NOT_TRACK=1` (this shell or CI job).
 - In the Hefesto GitHub Action telemetry is off by default (`telemetry: 0`). With `telemetry: 1`, each run also sends one ping (CLI version, file and issue counts, exit code) to Narapa's telemetry endpoint, stored without your IP address.
-- Separately, `hefesto analyze` checks pypi.org for a newer version at most once every 24 hours. In hefesto-ai 4.20.2 this check cannot be turned off.
+- Separately, `hefesto analyze` checks pypi.org for a newer version at most once every 24 hours. Set `HEFESTO_NO_UPDATE_CHECK=1` to skip it; `HEFESTO_TELEMETRY=0` and `DO_NOT_TRACK=1` also skip it (hefesto-ai 4.20.3 and later).
 <!-- telemetry-notice:end -->
 
 - The skills write only after you say yes: `.hefesto/triage.yaml` (threshold and dismissals, meant to be committed), `.hefesto/trend.jsonl` (append-only snapshots), a new git branch for fixes, and `.github/workflows/hefesto.yml`.
@@ -47,7 +47,6 @@ No style review. No XSS detection, no package-existence ("hallucinated API") che
 
 ## Known issues (hefesto-ai 4.20.x)
 
-- In 4.20.2 the pypi.org version check in `hefesto analyze` has no off switch. The minimum CLI version will be raised to the first release that adds one.
 - `hefesto pr-review` hides findings inside a function whose `def` line did not change, and it does not run the narrow semantic analyzer that `analyze` runs. The skills therefore run `hefesto analyze` on the touched files for PR verdicts.
 - `exclude` patterns in `.hefesto.yaml` match whole path components only. Globs (`*.py`, `tests/**`) match nothing and fail silently. Use literal names such as `tests/fixtures/`. A fix is in progress upstream; until it ships, the skills never propose glob patterns.
 - If `.hefesto/triage.yaml` shows up in your own results, add `.hefesto/` (a literal name) to `exclude`.

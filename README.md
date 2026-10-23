@@ -28,7 +28,7 @@ Then run `hefesto-gate-setup` once.
 
 ## Requirements
 
-- Python 3.10+ and git. The skills install `hefesto-ai>=4.20.2,<5` into a virtual environment.
+- Python 3.10+ and git. The skills install `hefesto-ai>=4.20.3,<5` into a virtual environment.
 
 ## Telemetry
 
@@ -41,13 +41,13 @@ The `hefesto-ai` CLI sends usage telemetry by default. The skills show this noti
 - On the first run the CLI only prints this notice and sends nothing.
 - Turn it off with `hefesto telemetry disable` (your user account on this machine, including git hooks), or `HEFESTO_TELEMETRY=0` or `DO_NOT_TRACK=1` (this shell or CI job).
 - In the Hefesto GitHub Action telemetry is off by default (`telemetry: 0`). With `telemetry: 1`, each run also sends one ping (CLI version, file and issue counts, exit code) to Narapa's telemetry endpoint, stored without your IP address.
-- Separately, `hefesto analyze` checks pypi.org for a newer version at most once every 24 hours. In hefesto-ai 4.20.2 this check cannot be turned off.
+- Separately, `hefesto analyze` checks pypi.org for a newer version at most once every 24 hours. Set `HEFESTO_NO_UPDATE_CHECK=1` to skip it; `HEFESTO_TELEMETRY=0` and `DO_NOT_TRACK=1` also skip it (hefesto-ai 4.20.3 and later).
 <!-- telemetry-notice:end -->
 
 ## Known issues
 
-- **Glob excludes:** in `hefesto-ai` 4.20.2, glob patterns in exclude settings are not applied. Exclude paths by directory, or pass only the files you want analyzed.
-- **`hefesto pr-review`:** in 4.20.2 it can skip findings and report a pass. The skills run `hefesto analyze` on the files the change touches instead.
+- **Glob excludes:** in `hefesto-ai` 4.20.3 and earlier, glob patterns in exclude settings are not applied. Exclude paths by directory, or pass only the files you want analyzed.
+- **`hefesto pr-review`:** in 4.20.3 and earlier it can skip findings and report a pass. The skills run `hefesto analyze` on the files the change touches instead.
 - **CLI upgrade messages:** upgrade prompts printed by the CLI are not relayed by the skills.
 - **Overlapping trigger:** the engine repository ships its own skill named `hefestoai`. `hefesto-gate` does not use that word as a trigger, but both may match a request to "check code with Hefesto".
 
