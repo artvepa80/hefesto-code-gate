@@ -25,7 +25,7 @@ Hooks and CI jobs run the CLI with nobody watching, so before you write any hook
 - On the first run the CLI only prints this notice and sends nothing.
 - Turn it off with `hefesto telemetry disable` (your user account on this machine, including git hooks), or `HEFESTO_TELEMETRY=0` or `DO_NOT_TRACK=1` (this shell or CI job).
 - In the Hefesto GitHub Action telemetry is off by default (`telemetry: 0`). With `telemetry: 1`, each run also sends one ping (CLI version, file and issue counts, exit code) to Narapa's telemetry endpoint, stored without your IP address.
-- Separately, `hefesto analyze` checks pypi.org for a newer version at most once every 24 hours. In hefesto-ai 4.20.2 this check cannot be turned off.
+- Separately, `hefesto analyze` checks pypi.org for a newer version at most once every 24 hours. Set `HEFESTO_NO_UPDATE_CHECK=1` to skip it; `HEFESTO_TELEMETRY=0` and `DO_NOT_TRACK=1` also skip it (hefesto-ai 4.20.3 and later).
 <!-- telemetry-notice:end -->
 
 Then ask: "Turn telemetry off for these runs?" If yes:
@@ -74,7 +74,7 @@ After the PR's first run, report whether the job passed, how many alerts appeare
 Only after the telemetry question above is answered. In a local agent session the hooks go into the clone you are working in. Show the user the commands, and run them only after a yes:
 
 ```
-pip install "hefesto-ai>=4.20.2,<5"   # in a venv, or: pipx install "hefesto-ai>=4.20.2,<5"
+pip install "hefesto-ai>=4.20.3,<5"   # in a venv, or: pipx install "hefesto-ai>=4.20.3,<5"
 hefesto install-hooks
 ```
 

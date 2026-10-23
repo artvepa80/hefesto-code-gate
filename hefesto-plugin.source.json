@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "cli_requirement": "hefesto-ai>=4.20.2,<5",
+  "cli_requirement": "hefesto-ai>=4.20.3,<5",
   "marketplace": {
     "name": "hefestoai",
     "cursor_name": "hefesto-code-gate",
@@ -39,11 +39,11 @@
     ],
     "onboarding_skill": "hefesto-gate-setup"
   },
-  "cli_floor": "4.20.2",
+  "cli_floor": "4.20.3",
   "telemetry": {
     "posthog_ip_discard": "on",
     "_comment_ip": "pending | on | off. Set after checking the PostHog project setting 'Discard client IP data'. Tag builds fail while pending.",
-    "update_check_optout": null,
+    "update_check_optout": "HEFESTO_NO_UPDATE_CHECK",
     "_comment_update": "null while the CLI floor has no switch for the pypi.org check; set to the env var name (HEFESTO_NO_UPDATE_CHECK) when the floor is raised to the release that adds it."
   },
   "references": {
