@@ -28,7 +28,7 @@ Then run `hefesto-gate-setup` once.
 
 ## Requirements
 
-- Python 3.10+ and git. The skills install `hefesto-ai>=4.20.3,<5` into a virtual environment.
+- Python 3.10+ and git. The skills install `hefesto-ai>=4.20.4,<5` into a virtual environment.
 
 ## Telemetry
 

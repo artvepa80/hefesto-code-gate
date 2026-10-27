@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "cli_requirement": "hefesto-ai>=4.20.3,<5",
+  "cli_requirement": "hefesto-ai>=4.20.4,<5",
   "marketplace": {
     "name": "hefestoai",
     "cursor_name": "hefesto-code-gate",
@@ -39,7 +39,7 @@
     ],
     "onboarding_skill": "hefesto-gate-setup"
   },
-  "cli_floor": "4.20.3",
+  "cli_floor": "4.20.4",
   "telemetry": {
     "posthog_ip_discard": "on",
     "_comment_ip": "pending | on | off. Set after checking the PostHog project setting 'Discard client IP data'. Tag builds fail while pending.",
@@ -49,7 +49,7 @@
   "references": {
     "engine_repo": "artvepa80/Agents-Hefesto",
     "files": {
-      "skill/issue_types.md": "plugins/hefesto-code-gate/skills/hefesto-gate/references/issue_types.md"
+      "skills/hefestoai/issue_types.md": "plugins/hefesto-code-gate/skills/hefesto-gate/references/issue_types.md"
     }
   },
   "pins": {

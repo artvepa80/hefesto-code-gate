@@ -33,7 +33,7 @@ Then give the telemetry notice, before anything is installed or run, in these wo
 End with: "Say 'telemetry off' to turn it off first. Which repo or folder should I check?"
 
 ## First minute (no more questions)
-1. Install: `python3 -m venv ~/.hefesto-venv && ~/.hefesto-venv/bin/pip install "hefesto-ai>=4.20.3,<5"`. If they said telemetry off, run `hefesto telemetry disable` right after the install, before any analysis.
+1. Install: `python3 -m venv ~/.hefesto-venv && ~/.hefesto-venv/bin/pip install "hefesto-ai>=4.20.4,<5"`. If they said telemetry off, run `hefesto telemetry disable` right after the install, before any analysis.
 2. `hefesto analyze . --output json --fail-on high` in the repo they named.
 3. Triage as in hefesto-gate, pick the single worst **real** finding, and run hefesto-fix-verify on it in a new local branch. Don't open a PR.
 4. Reply with the verdict line, that one finding in two sentences, the verified diff with before/after evidence, and the count of everything else.

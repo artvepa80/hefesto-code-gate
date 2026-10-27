@@ -20,7 +20,7 @@ Agent skills that run the open-source [HefestoAI](https://github.com/artvepa80/A
 
 ## What runs, what is sent, what is written
 
-- Installs `hefesto-ai>=4.20.3,<5` from PyPI into `~/.hefesto-venv`. Analysis runs locally; your code is not uploaded.
+- Installs `hefesto-ai>=4.20.4,<5` from PyPI into `~/.hefesto-venv`. Analysis runs locally; your code is not uploaded.
 - The skills do not relay upgrade or pricing messages that the CLI may print.
 - Telemetry from the CLI (the skills show this before the first run and before writing hooks or CI):
 

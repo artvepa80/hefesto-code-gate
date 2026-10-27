@@ -19,7 +19,7 @@ One job: run the deterministic HefestoAI gate, separate real findings from noise
 
 ## Setup
 If `hefesto` is not installed, or `.hefesto/triage.yaml` is missing and the user hasn't seen the telemetry notice, run **hefesto-gate-setup** first. Otherwise:
-1. `python3 -m venv ~/.hefesto-venv && ~/.hefesto-venv/bin/pip install "hefesto-ai>=4.20.3,<5"`
+1. `python3 -m venv ~/.hefesto-venv && ~/.hefesto-venv/bin/pip install "hefesto-ai>=4.20.4,<5"`
 2. `hefesto --version`. Put the version in every report.
 
 ## Run

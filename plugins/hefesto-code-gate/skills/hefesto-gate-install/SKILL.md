@@ -74,7 +74,7 @@ After the PR's first run, report whether the job passed, how many alerts appeare
 Only after the telemetry question above is answered. In a local agent session the hooks go into the clone you are working in. Show the user the commands, and run them only after a yes:
 
 ```
-pip install "hefesto-ai>=4.20.3,<5"   # in a venv, or: pipx install "hefesto-ai>=4.20.3,<5"
+pip install "hefesto-ai>=4.20.4,<5"   # in a venv, or: pipx install "hefesto-ai>=4.20.4,<5"
 hefesto install-hooks
 ```
 

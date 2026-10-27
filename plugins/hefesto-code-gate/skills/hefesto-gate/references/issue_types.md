@@ -1,4 +1,4 @@
-<!-- Copied from https://github.com/artvepa80/Agents-Hefesto/blob/v4.20.3/skill/issue_types.md (MIT, Copyright (c) Narapa LLC). Do not edit here; run scripts/gen_manifests.py --sync-references after raising cli_floor. -->
+<!-- Copied from https://github.com/artvepa80/Agents-Hefesto/blob/v4.20.4/skills/hefestoai/issue_types.md (MIT, Copyright (c) Narapa LLC). Do not edit here; run scripts/gen_manifests.py --sync-references after raising cli_floor. -->
 # HefestoAI Issue Types Reference
 
 Source: `hefesto/core/analysis_models.py` — `AnalysisIssueType` enum.
@@ -123,7 +123,7 @@ Source: `hefesto/core/analysis_models.py` — `AnalysisIssueType` enum.
 
 ## Reliability Drift — EPIC 4 (5)
 
-See [reliability_drift.md](https://github.com/artvepa80/Agents-Hefesto/blob/v4.20.3/skill/reliability_drift.md) for patterns and fixes.
+See [reliability_drift.md](https://github.com/artvepa80/Agents-Hefesto/blob/v4.20.4/skills/hefestoai/reliability_drift.md) for patterns and fixes.
 
 | Type | Severity | Description |
 |------|----------|-------------|
