@@ -64,6 +64,8 @@ The `hefesto-ai` CLI sends usage telemetry by default. The skills show this noti
 - `python3 scripts/public_audit.py` checks that nothing private is about to be published. It runs in CI and can run as a pre-push hook: `ln -s ../../scripts/public_audit.py .git/hooks/pre-push`.
 - The audit also fails on any path under `docs/worklog/`, any file or folder named like a worklog or handoff, and any landing page source folder.
 
+CI pins Claude Code 2.1.308 and runs `claude plugin validate --strict` on the plugin and on the marketplace root, with no warnings tolerated. The directory-listing fields in `.claude-plugin/plugin.json` follow the [official plugins reference](https://code.claude.com/docs/en/plugins-reference#directory-listing-fields). Passing `--strict` locally does not guarantee that a directory portal's own validation will pass.
+
 ## License
 
 [MIT](LICENSE)

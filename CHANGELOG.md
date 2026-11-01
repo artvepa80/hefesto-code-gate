@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The minimum `hefesto-ai` CLI version is raised to 4.20.4 (`hefesto-ai>=4.20.4,<5`).
 - `hefesto-gate/references/issue_types.md` is now copied from the engine at v4.20.4, from its new path `skills/hefestoai/issue_types.md`.
 - The plugin logo and icon (`assets/logo.png`, `assets/icon.png`, `assets/logo.svg`) now use the official HefestoAI artwork instead of the placeholder.
+- CI pins `actions/setup-node` to the v7.1.0 commit SHA, and the README documents the `claude plugin validate --strict` check.
 
 ## [1.0.0] - 2026-10-23
 
