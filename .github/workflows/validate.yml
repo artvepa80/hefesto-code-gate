@@ -76,7 +76,7 @@ jobs:
           jsonschema.validate(json.load(open("plugins/hefesto-code-gate/plugin.json")), s)
           print("plugin.json OK")
           PY
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: "22"
       - name: Claude plugin validate --strict (Claude Code 2.1.308, pinned)
@@ -88,7 +88,7 @@ jobs:
           #   https://code.claude.com/docs/en/plugins-reference#fields
           #   https://code.claude.com/docs/en/plugins-reference#validate-the-manifest
           # Claude Code v2.1.281+ no longer reports those fields as unknown, so
-          # --strict passes. Versions 2.1.281+ require Node.js 22. Re-check
+          # --strict passes. We run Node 22. Re-check
           # --strict on every Claude Code version bump.
           npm install -g @anthropic-ai/claude-code@2.1.308
           claude --version
