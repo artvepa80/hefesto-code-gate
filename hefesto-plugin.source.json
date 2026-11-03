@@ -27,7 +27,9 @@
       "quality-gate",
       "ci",
       "pre-commit",
-      "hefestoai"
+      "hefestoai",
+      "code-review",
+      "security-gate"
     ],
     "category": "Developer Tools",
     "privacy_policy_url": "https://hefestoai.narapallc.com/privacy",

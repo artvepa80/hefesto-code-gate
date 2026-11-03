@@ -16,7 +16,9 @@
     "quality-gate",
     "ci",
     "pre-commit",
-    "hefestoai"
+    "hefestoai",
+    "code-review",
+    "security-gate"
   ],
   "extensions": {
     "com.openai": {

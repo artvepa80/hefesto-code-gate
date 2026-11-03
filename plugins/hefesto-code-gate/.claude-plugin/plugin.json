@@ -16,7 +16,9 @@
     "quality-gate",
     "ci",
     "pre-commit",
-    "hefestoai"
+    "hefestoai",
+    "code-review",
+    "security-gate"
   ],
   "icon": "./assets/logo.png",
   "documentationUrl": "https://github.com/artvepa80/hefesto-code-gate#readme",
