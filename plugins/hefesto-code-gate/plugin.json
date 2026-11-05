@@ -17,7 +17,7 @@
     "ci",
     "pre-commit",
     "hefestoai",
-    "code-review",
+    "static-analysis",
     "security-gate"
   ],
   "extensions": {
