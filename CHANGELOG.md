@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-05
+
 ### Changed
 
 - Plugin keywords now include `security-gate` and `static-analysis` for discovery.
@@ -33,5 +35,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Public-content audit: path rules for worklogs, handoffs and landing page source folders, generic checks for references to non-public repositories or pull requests, and unit tests.
 - README: install steps for Claude Code, Codex and Cursor, telemetry notice and known issues; plugin README includes the install line for each platform.
 
-[Unreleased]: https://github.com/artvepa80/hefesto-code-gate/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/artvepa80/hefesto-code-gate/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/artvepa80/hefesto-code-gate/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/artvepa80/hefesto-code-gate/releases/tag/v1.0.0

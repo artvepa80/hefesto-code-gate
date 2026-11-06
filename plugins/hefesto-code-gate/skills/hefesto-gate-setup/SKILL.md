@@ -10,7 +10,7 @@ license: MIT
 compatibility: Requires python3 >= 3.10, git, and network access to pypi.org.
 metadata:
   author: Narapa LLC
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 # Hefesto Gate Setup
 

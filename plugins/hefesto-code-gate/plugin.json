@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "hefesto-code-gate",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Run the open-source HefestoAI CLI on a PR, diff or repo, triage each finding against the code, fix the real ones with proof, and add the gate to CI.",
   "author": {
     "name": "Narapa LLC",
@@ -43,7 +43,7 @@
       },
       "onboardingSkill": "./skills/hefesto-gate-setup/SKILL.md",
       "publication": {
-        "release_notes": "v1.0.0"
+        "release_notes": "v1.0.1"
       }
     }
   }

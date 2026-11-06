@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "cli_requirement": "hefesto-ai>=4.20.4,<5",
   "marketplace": {
     "name": "hefestoai",
