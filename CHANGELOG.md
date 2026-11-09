@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- README requirements now say Python 3.11+, because `hefesto-ai>=4.20.4,<5` can install 4.21.0, which needs Python 3.11. The CLI floor stays `4.20.4`.
+- README requirements and skill `compatibility` lines now say Python 3.11+, because `hefesto-ai>=4.20.4,<5` can install 4.21.0, which needs Python 3.11. The CLI floor stays `4.20.4`.
 
 ## [1.0.1] - 2026-11-05
 

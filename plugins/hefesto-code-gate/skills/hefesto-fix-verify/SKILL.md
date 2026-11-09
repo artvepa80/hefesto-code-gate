@@ -7,7 +7,7 @@ description: >-
   a hefesto-gate report. Opens a draft PR only after the user says yes.
 disable-model-invocation: true
 license: MIT
-compatibility: Requires python3 >= 3.10, git, and the hefesto-ai CLI.
+compatibility: Requires python3 >= 3.11, git, and the hefesto-ai CLI.
 metadata:
   author: Narapa LLC
   version: "1.0.1"

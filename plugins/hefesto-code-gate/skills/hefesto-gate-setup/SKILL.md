@@ -7,7 +7,7 @@ description: >-
   right after installing the plugin.
 disable-model-invocation: true
 license: MIT
-compatibility: Requires python3 >= 3.10, git, and network access to pypi.org.
+compatibility: Requires python3 >= 3.11, git, and network access to pypi.org.
 metadata:
   author: Narapa LLC
   version: "1.0.1"

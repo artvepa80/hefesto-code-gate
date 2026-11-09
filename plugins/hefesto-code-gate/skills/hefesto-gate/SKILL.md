@@ -8,7 +8,7 @@ description: >-
   CI setup (hefesto-gate-install), trends (hefesto-weekly-trend) or first-time
   setup (hefesto-gate-setup).
 license: MIT
-compatibility: Requires python3 >= 3.10, git, and network access to pypi.org.
+compatibility: Requires python3 >= 3.11, git, and network access to pypi.org.
 metadata:
   author: Narapa LLC
   version: "1.0.1"

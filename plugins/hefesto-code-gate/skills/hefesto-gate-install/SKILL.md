@@ -6,7 +6,7 @@ description: >-
   git hooks. Use when the user wants the gate to keep running without an agent.
   Prepares the workflow as a reviewable change and never pushes it alone.
 license: MIT
-compatibility: Requires git; GitHub Actions for CI; python3 >= 3.10 for local hooks.
+compatibility: Requires git; GitHub Actions for CI; python3 >= 3.11 for local hooks.
 metadata:
   author: Narapa LLC
   version: "1.0.1"

@@ -6,7 +6,7 @@ description: >-
   improved. Use when the user asks how the repo's code health or security trend
   moved this week or since the last check.
 license: MIT
-compatibility: Requires python3 >= 3.10, git, and the hefesto-ai CLI.
+compatibility: Requires python3 >= 3.11, git, and the hefesto-ai CLI.
 metadata:
   author: Narapa LLC
   version: "1.0.1"
