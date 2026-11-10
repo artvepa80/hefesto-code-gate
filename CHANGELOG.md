@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Link the privacy policy from the plugin README and the root README.
+
 ## [1.0.1] - 2026-11-05
 
 ### Changed
