@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Link the privacy policy from the plugin README and the root README.
+- `scripts/check_plugin_file_types.py` checks that the plugin directory only ships file types Anthropic's plugin directory accepts from organizations that are not Verified.
+
+### Changed
+
+- Skill `description` fields are written as a single YAML line.
+- Cursor marketplace logos point at `assets/logo.png`. The plugin package no longer includes `logo.svg`; the vector file stays at repo-root `assets/logo.svg`.
 
 ## [1.0.1] - 2026-11-05
 

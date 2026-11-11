@@ -1,10 +1,6 @@
 ---
 name: hefesto-gate-install
-description: >-
-  Add the HefestoAI gate to GitHub Actions so it runs on every push and pull
-  request, with results in GitHub code scanning, and optionally install local
-  git hooks. Use when the user wants the gate to keep running without an agent.
-  Prepares the workflow as a reviewable change and never pushes it alone.
+description: "Add the HefestoAI gate to GitHub Actions so it runs on every push and pull request, with results in GitHub code scanning, and optionally install local git hooks. Use when the user wants the gate to keep running without an agent. Prepares the workflow as a reviewable change and never pushes it alone."
 license: MIT
 compatibility: Requires git; GitHub Actions for CI; python3 >= 3.10 for local hooks.
 metadata:

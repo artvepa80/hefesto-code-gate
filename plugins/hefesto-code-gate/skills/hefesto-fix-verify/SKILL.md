@@ -1,10 +1,6 @@
 ---
 name: hefesto-fix-verify
-description: >-
-  Fix one HefestoAI finding that hefesto-gate labeled real: write the smallest
-  patch, prove with the hefesto-ai CLI and the repo's tests that the finding is
-  gone and nothing new appeared, and hand over the diff. Invoke explicitly after
-  a hefesto-gate report. Opens a draft PR only after the user says yes.
+description: "Fix one HefestoAI finding that hefesto-gate labeled real: write the smallest patch, prove with the hefesto-ai CLI and the repo's tests that the finding is gone and nothing new appeared, and hand over the diff. Invoke explicitly after a hefesto-gate report. Opens a draft PR only after the user says yes."
 disable-model-invocation: true
 license: MIT
 compatibility: Requires python3 >= 3.10, git, and the hefesto-ai CLI.
