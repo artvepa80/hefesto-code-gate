@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Link the privacy policy from the plugin README and the root README.
-- `scripts/check_plugin_file_types.py` checks that the plugin directory only ships file types Anthropic's plugin directory accepts from organizations that are not Verified.
+- `scripts/check_plugin_file_types.py` checks that the plugin directory only ships file types accepted by both the public pre-submission checklist and the directory portal policy for organizations that are not Verified.
 
 ### Changed
 

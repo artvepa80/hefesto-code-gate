@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
-"""Check that the plugin directory ships only file types Anthropic's
-plugin directory accepts from organizations that are not Verified.
+"""Check that the plugin directory ships only file types accepted by
+both the public pre-submission checklist and the directory portal policy
+for organizations that are not Verified.
 
-Allowed: Markdown, text, JSON, YAML, and PNG, JPEG, GIF, WebP or ICO
-images. A LICENSE, README, .gitignore and the listing icon may stay.
-Shebang files and package-manager config (for example pnpm-workspace.yaml)
-are refused. Text files must be UTF-8 without NUL bytes.
+The public checklist (https://claude.com/docs/plugins/pre-submission-checklist)
+allows text files including SVG, plus PNG, JPEG, GIF and WebP, and holds
+ICO and other binaries. The portal refused SVG and allowed ICO. This
+checker uses the intersection: Markdown, text, JSON, YAML, and PNG, JPEG,
+GIF or WebP. LICENSE is allowed by exact name. Shebang files and
+package-manager config (for example pnpm-workspace.yaml) are refused.
+Text files must be UTF-8 without NUL bytes.
 
-This local check covers the shipped-file part of that policy.
+This local check covers the shipped-file part of that intersection.
 `claude plugin validate --strict` does not; the directory also runs a
 safety scan and a policy review that this command does not.
 
@@ -22,10 +26,10 @@ from pathlib import Path
 
 ALLOWED_EXT = {
     ".md", ".txt", ".json", ".yaml", ".yml",
-    ".png", ".jpeg", ".jpg", ".gif", ".webp", ".ico",
+    ".png", ".jpeg", ".jpg", ".gif", ".webp",
 }
-IMAGE_EXT = {".png", ".jpeg", ".jpg", ".gif", ".webp", ".ico"}
-ALLOWED_NAMES = {"LICENSE", "README", "README.md", ".gitignore", "NOTICE", "COPYING"}
+IMAGE_EXT = {".png", ".jpeg", ".jpg", ".gif", ".webp"}
+ALLOWED_NAMES = {"LICENSE"}
 PACKAGE_MANAGER = {
     "pnpm-workspace.yaml", "pnpm-lock.yaml",
     "package.json", "package-lock.json", "npm-shrinkwrap.json",

@@ -22,6 +22,13 @@ class SyntheticTree(unittest.TestCase):
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(data)
 
+    def test_ico_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._write(root, "favicon.ico", b"\x00\x00\x01\x00")
+            hits = collect_findings(root)
+            self.assertTrue(any("favicon.ico" in h and "not accepted" in h for h in hits), hits)
+
     def test_svg_is_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
