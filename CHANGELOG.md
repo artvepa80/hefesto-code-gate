@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Link the privacy policy from the plugin README and the root README.
+
 ### Changed
 
-- README requirements and skill `compatibility` lines now say Python 3.11+, because `hefesto-ai>=4.20.4,<5` can install 4.21.0, which needs Python 3.11. The CLI floor stays `4.20.4`.
+- README requirements and skill `compatibility` lines now say Python 3.11+. On Python 3.10, `hefesto-ai>=4.20.4,<5` still installs 4.20.x because 4.21.0 declares `Requires-Python: >=3.11`. Python 3.10 reached end-of-life on 2026-10-01. The CLI floor stays `4.20.4`.
 
 ## [1.0.1] - 2026-11-05
 

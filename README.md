@@ -32,7 +32,7 @@ Then run `hefesto-gate-setup` once.
 
 ## Telemetry
 
-The `hefesto-ai` CLI sends usage telemetry by default. The skills show this notice before the first run and before installing hooks or CI:
+The `hefesto-ai` CLI sends usage telemetry by default. The skills show this notice before the first run and before installing hooks or CI (see the [privacy policy](https://hefestoai.narapallc.com/privacy)):
 
 <!-- telemetry-notice:start (generated from docs/telemetry-notice.md) -->
 - The hefesto-ai CLI sends usage events to PostHog (us.i.posthog.com) by default. Every event carries the event name, the install ID below, and where it ran (cli, hook, ci or action). `analyze` events also carry the CLI, OS and Python versions, how the CLI was installed (PyPI or editable), environment labels such as `ci`, `github_actions` or `docker`, and counts (files, issues, duration, exit code).
