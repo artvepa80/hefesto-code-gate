@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2]
+
 ### Added
 
 - Link the privacy policy from the plugin README and the root README.
@@ -16,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Skill `description` fields are written as a single YAML line.
 - Cursor marketplace logos point at `assets/logo.png`. The plugin package no longer includes `logo.svg`; the vector file stays at repo-root `assets/logo.svg`.
+- README requirements and skill `compatibility` lines now say Python 3.11+. On Python 3.10, `hefesto-ai>=4.20.4,<5` still installs 4.20.x because 4.21.0 declares `Requires-Python: >=3.11`. Python 3.10 reached end-of-life on 2026-10-01. The CLI floor stays `4.20.4`.
 
 ## [1.0.1] - 2026-11-05
 
@@ -45,6 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Public-content audit: path rules for worklogs, handoffs and landing page source folders, generic checks for references to non-public repositories or pull requests, and unit tests.
 - README: install steps for Claude Code, Codex and Cursor, telemetry notice and known issues; plugin README includes the install line for each platform.
 
-[Unreleased]: https://github.com/artvepa80/hefesto-code-gate/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/artvepa80/hefesto-code-gate/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/artvepa80/hefesto-code-gate/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/artvepa80/hefesto-code-gate/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/artvepa80/hefesto-code-gate/releases/tag/v1.0.0

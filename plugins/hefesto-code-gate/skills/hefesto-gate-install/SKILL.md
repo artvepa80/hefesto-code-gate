@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires git; GitHub Actions for CI; python3 >= 3.10 for local hooks.
 metadata:
   author: Narapa LLC
-  version: "1.0.1"
+  version: "1.0.2"
 ---
 # Hefesto Gate Install
 

@@ -6,7 +6,7 @@ license: MIT
 compatibility: Requires python3 >= 3.10, git, and the hefesto-ai CLI.
 metadata:
   author: Narapa LLC
-  version: "1.0.1"
+  version: "1.0.2"
 ---
 # Hefesto Fix & Verify
 
