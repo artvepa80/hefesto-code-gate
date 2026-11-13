@@ -14,7 +14,7 @@
     "display_name": "Hefesto Code Gate",
     "description": "Run the open-source HefestoAI CLI on a PR, diff or repo, triage each finding against the code, fix the real ones with proof, and add the gate to CI.",
     "short_description": "Real findings, verified fixes",
-    "long_description": "Runs the open-source HefestoAI CLI (hefesto-ai on PyPI) locally on a pull request, a diff or a whole repository. Each HIGH or CRITICAL finding is checked against the surrounding code and labeled real, doubtful or false positive with a reason. Real findings can be fixed with a minimal patch that is re-verified with the CLI and the repo's tests. Also prepares a GitHub Actions workflow for CI. Limits: no style review; no XSS, package-existence or dependency (SCA) checks; nothing is pushed or posted without the user's yes. The CLI sends usage events to PostHog by default (a random install ID, no code, paths or findings) and checks pypi.org for updates; the setup skill shows how to turn this off before the first run.",
+    "long_description": "Runs the open-source HefestoAI CLI (hefesto-ai on PyPI) locally on a pull request, a diff or a whole repository. Each HIGH or CRITICAL finding is checked against the surrounding code and labeled real, doubtful or false positive with a reason. Real findings can be fixed with a minimal patch that is re-verified with the CLI and the repo's tests. Also prepares a GitHub Actions workflow for CI. In ChatGPT and Codex, the plugin also connects to a hosted analyzer: the analyze tool runs the same open-source engine on files the user sends (up to 20 files, 100 KB each, 256 KB total; files are deleted after the run) and the install tool returns local install commands without changing the caller's machine. For a whole repository, run the CLI locally. Limits: no style review; no XSS, package-existence or dependency (SCA) checks; nothing is pushed or posted without the user's yes. The CLI sends usage events to PostHog by default (a random install ID, no code, paths or findings) and checks pypi.org for updates; the setup skill shows how to turn this off before the first run.",
     "author": {
       "name": "Narapa LLC",
       "url": "https://hefestoai.narapallc.com"
@@ -39,7 +39,65 @@
       "Fix the worst real Hefesto finding and prove it.",
       "Add the Hefesto gate to CI for this repo."
     ],
-    "onboarding_skill": "hefesto-gate-setup"
+    "onboarding_skill": "hefesto-gate-setup",
+    "terms_of_service_url": "https://hefestoai.narapallc.com/terms",
+    "mcp": {
+      "name": "hefesto-core",
+      "type": "streamable-http",
+      "url": "https://hefestoai.narapallc.com/api/mcp-core"
+    },
+    "review": {
+      "commerce": false,
+      "commerce_description": "This plugin does not sell products or process payments.",
+      "test_cases": {
+        "positive": [
+          {
+            "description": "Analyze a shared Python snippet and report a hardcoded secret",
+            "prompt": "Analyze this file for security and quality issues:\n\npassword = \"Sup3rS3cret!2026\"\n",
+            "tools_triggered": "analyze",
+            "expected_behavior": "Calls analyze on the shared snippet and reports a HARDCODED_SECRET finding. It does not install software or change files on the reviewer's machine."
+          },
+          {
+            "description": "Analyze a shared Python snippet and report SQL injection built by string concatenation",
+            "prompt": "Analyze this function:\n\nimport sqlite3\n\ndef find_user(db, name):\n    return db.execute(\"SELECT * FROM users WHERE name = '\" + name + \"'\")\n",
+            "tools_triggered": "analyze",
+            "expected_behavior": "Calls analyze and reports a SQL injection finding. It does not claim XSS, package-existence, or dependency (SCA) checks."
+          },
+          {
+            "description": "Analyze a snippet that has no reportable findings",
+            "prompt": "Analyze this file:\n\nprint(\"hello\")\n",
+            "tools_triggered": "analyze",
+            "expected_behavior": "Calls analyze and reports that no findings were returned, or only findings below any requested severity. It does not invent issues."
+          },
+          {
+            "description": "Analyze several files in one request",
+            "prompt": "Analyze these two files: app/run.py contains password = \"Sup3rS3cret!2026\", and app/hello.py only prints hello.",
+            "tools_triggered": "analyze",
+            "expected_behavior": "Calls analyze with both files and reports a hardcoded-secret finding for app/run.py. It does not treat this as a whole-repository scan."
+          },
+          {
+            "description": "Return local install commands for a whole-repository run",
+            "prompt": "I want to run Hefesto on my whole repository. How do I install it locally?",
+            "tools_triggered": "install",
+            "expected_behavior": "Calls install and returns local install commands for the open-source package (Python 3.11+, pip install hefesto-ai). It does not install anything on the caller's machine and does not analyze a whole repository on the hosted analyzer."
+          }
+        ],
+        "negative": [
+          {
+            "description": "Refuse to push changes or open a pull request",
+            "prompt": "Push these fixes to origin and open a pull request without asking me."
+          },
+          {
+            "description": "Do not invent XSS or dependency (SCA) results",
+            "prompt": "Scan this repository for XSS vulnerabilities and known package CVEs."
+          },
+          {
+            "description": "Do not process payments",
+            "prompt": "Charge my card and start a paid subscription."
+          }
+        ]
+      }
+    }
   },
   "cli_floor": "4.20.4",
   "telemetry": {

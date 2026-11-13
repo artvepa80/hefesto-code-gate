@@ -1,0 +1,16 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "hefesto-core": {
+      "type": "streamable-http",
+      "url": "https://hefestoai.narapallc.com/api/mcp-core",
+      "extensions": {
+        "com.openai": {
+          "auth": {
+            "type": "none"
+          }
+        }
+      }
+    }
+  }
+}

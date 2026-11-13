@@ -9,6 +9,7 @@ Usage:
   python3 scripts/gen_manifests.py --resolve-pins      # network: resolve action tags to commits
   python3 scripts/gen_manifests.py --sync-references   # network: copy engine docs at the CLI floor
   python3 scripts/gen_manifests.py --codex-zip dist/x.zip  # build the OpenAI upload ZIP
+                                                          # (plugin.json, mcp.json, skills, assets)
 
 Rules checked: skill name == folder name and matches the Agent Skills pattern,
 description 1..1024 chars written as a single-line YAML scalar, metadata.version
@@ -125,21 +126,39 @@ def build(src: dict) -> dict[str, str]:
         "supportUrl": p["repository"] + "/issues",
         "privacyPolicyUrl": p["privacy_policy_url"],
     })
-    files[pdir + "/plugin.json"] = dump({
-        "$schema": AP_SCHEMA, **common,
-        "extensions": {"com.openai": {
-            "interface": {
-                "displayName": p["display_name"], "shortDescription": p["short_description"],
-                "longDescription": p["long_description"], "developerName": p["author"]["name"],
-                "category": p["category"], "capabilities": [],
-                "websiteURL": p["repository"], "supportURL": p["repository"] + "/issues",
-                "privacyPolicyURL": p["privacy_policy_url"], "defaultPrompt": p["default_prompts"],
-                "brandColor": p["brand_color"], "composerIcon": "./assets/icon.png", "logo": "./assets/logo.png",
-            },
-            "onboardingSkill": f"./skills/{p['onboarding_skill']}/SKILL.md",
-            "publication": {"release_notes": f"v{v}"},
-        }},
-    })
+    interface = {
+        "displayName": p["display_name"], "shortDescription": p["short_description"],
+        "longDescription": p["long_description"], "developerName": p["author"]["name"],
+        "category": p["category"], "capabilities": [],
+        "websiteURL": p["repository"], "supportURL": p["repository"] + "/issues",
+        "privacyPolicyURL": p["privacy_policy_url"], "defaultPrompt": p["default_prompts"],
+        "brandColor": p["brand_color"], "composerIcon": "./assets/icon.png", "logo": "./assets/logo.png",
+    }
+    if p.get("terms_of_service_url"):
+        interface["termsOfServiceURL"] = p["terms_of_service_url"]
+    openai_ext = {
+        "interface": interface,
+        "onboardingSkill": f"./skills/{p['onboarding_skill']}/SKILL.md",
+        "publication": {"release_notes": f"v{v}"},
+    }
+    if p.get("review"):
+        review = {k: p["review"][k] for k in p["review"]}
+        openai_ext["review"] = review
+    files[pdir + "/plugin.json"] = dump({"$schema": AP_SCHEMA, **common,
+                                        "extensions": {"com.openai": openai_ext}})
+    if p.get("mcp"):
+        mcp = p["mcp"]
+        # This hosted endpoint is unauthenticated; the OpenAI portable
+        # format records that as auth.type "none" (not a credential).
+        entry = {
+            "type": mcp["type"],
+            "url": mcp["url"],
+            "extensions": {"com.openai": {"auth": {"type": "none"}}},
+        }
+        files[pdir + "/mcp.json"] = dump({
+            "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+            "mcpServers": {mcp["name"]: entry},
+        })
     block = notice(src)
     targets = [f"{pdir}/skills/{sk}/SKILL.md" for sk in NOTICE_SKILLS] + ["README.md", f"{pdir}/README.md"]
     for rel_s in targets:
@@ -158,7 +177,58 @@ def _check_interface(src: dict, tag: str | None) -> list[str]:
     errs += [f"defaultPrompt too long: {d}" for d in p["default_prompts"] if len(d) > 128]
     if len(p["default_prompts"]) > 3:
         errs.append("more than 3 defaultPrompt")
+    name = p["display_name"].strip()
+    for suffix in (" MCP", " MCP Server", " Plugin"):
+        if name.lower().endswith(suffix.lower()):
+            errs.append(f"displayName must not end with {suffix!r}")
     return errs
+
+
+def _https_ok(url: str) -> bool:
+    return url.startswith("https://") and len(url) <= 1024
+
+
+def _missing_case_fields(cases: list, keys: tuple[str, ...], label: str) -> list[str]:
+    errs = []
+    for i, case in enumerate(cases, 1):
+        for key in keys:
+            if not str(case.get(key) or "").strip():
+                errs.append(f"{label} case {i} missing {key}")
+    return errs
+
+
+def _check_review_cases(review: dict) -> list[str]:
+    cases = review.get("test_cases") or {}
+    pos, neg = cases.get("positive") or [], cases.get("negative") or []
+    errs = []
+    if len(pos) != 5:
+        errs.append(f"review.test_cases.positive must have 5 cases, got {len(pos)}")
+    if len(neg) != 3:
+        errs.append(f"review.test_cases.negative must have 3 cases, got {len(neg)}")
+    return (errs
+            + _missing_case_fields(pos, ("description", "prompt", "tools_triggered", "expected_behavior"), "positive")
+            + _missing_case_fields(neg, ("description", "prompt"), "negative"))
+
+
+def _check_mcp_and_review(src: dict) -> list[str]:
+    p = src["plugin"]
+    mcp, review = p.get("mcp"), p.get("review")
+    if not mcp:
+        return []
+    errs = []
+    if mcp.get("type") != "streamable-http":
+        errs.append("mcp.type must be streamable-http for a remote OpenAI package")
+    if not _https_ok(mcp.get("url") or ""):
+        errs.append("mcp.url must be HTTPS and at most 1024 characters")
+    if not mcp.get("name"):
+        errs.append("mcp.name is required")
+    if "auth_type" in mcp or "auth" in mcp:
+        errs.append("mcp must not store an auth field; unauthenticated access is fixed in gen_manifests")
+    if not _https_ok(p.get("terms_of_service_url") or ""):
+        errs.append("terms_of_service_url must be HTTPS and at most 1024 characters")
+    if not review:
+        return errs + ["review is required when mcp is set"]
+    return errs + _check_review_cases(review)
 
 
 def _check_plugin_files(pdir: Path) -> list[str]:
@@ -229,7 +299,8 @@ def _check_refs_and_pins(src: dict) -> list[str]:
 def checks(src: dict, tag: str | None) -> list[str]:
     pdir = ROOT / src["plugin"]["dir"]
     skills = sorted((pdir / "skills").glob("*/SKILL.md"))
-    errs = _check_interface(src, tag) + _check_plugin_files(pdir) + ([] if skills else ["no skills found"])
+    errs = (_check_interface(src, tag) + _check_plugin_files(pdir)
+            + _check_mcp_and_review(src) + ([] if skills else ["no skills found"]))
     for s in skills:
         errs += _check_skill(s, src["version"], src["cli_requirement"])
     from check_plugin_file_types import collect_findings
