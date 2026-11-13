@@ -2,7 +2,7 @@
 name: hefesto-gate
 description: "Run the HefestoAI quality gate (hefesto-ai CLI) on a pull request, a diff or a repo, then triage each HIGH/CRITICAL finding against the surrounding code and report only the real ones. Use when the user asks to check, gate or scan code before a commit or merge. Not for fixing findings (hefesto-fix-verify), CI setup (hefesto-gate-install), trends (hefesto-weekly-trend) or first-time setup (hefesto-gate-setup)."
 license: MIT
-compatibility: Requires python3 >= 3.10, git, and network access to pypi.org.
+compatibility: Requires python3 >= 3.11, git, and network access to pypi.org.
 metadata:
   author: Narapa LLC
   version: "1.0.2"

@@ -3,7 +3,7 @@ name: hefesto-gate-setup
 description: "First-time setup for the Hefesto Code Gate plugin: disclose the hefesto-ai CLI's telemetry, install the CLI, show one real verified result on the user's repo in the first minute, then record the gate threshold. Invoke explicitly right after installing the plugin."
 disable-model-invocation: true
 license: MIT
-compatibility: Requires python3 >= 3.10, git, and network access to pypi.org.
+compatibility: Requires python3 >= 3.11, git, and network access to pypi.org.
 metadata:
   author: Narapa LLC
   version: "1.0.2"
