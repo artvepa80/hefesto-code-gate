@@ -21,7 +21,6 @@ Agent skills that run the open-source [HefestoAI](https://github.com/artvepa80/A
 ## What runs, what is sent, what is written
 
 - The skills install `hefesto-ai>=4.20.4,<5` from PyPI into `~/.hefesto-venv` and run analysis locally; they do not upload your code.
-- The OpenAI package also references a hosted analyzer at `https://hefestoai.narapallc.com/api/mcp-core`. Its `analyze` tool runs the same open-source engine on files you send (up to 20 files, 100 KB each, 256 KB total). Files are deleted after the run; nothing is stored. For a whole repository, run the CLI locally. Its `install` tool returns local install commands and does not install anything on the caller's machine.
 - The skills do not relay upgrade or pricing messages that the CLI may print.
 - Telemetry from the CLI (the skills show this before the first run and before writing hooks or CI; see the [privacy policy](https://hefestoai.narapallc.com/privacy)):
 

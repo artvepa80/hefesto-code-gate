@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- The OpenAI package now includes a remote `mcp.json` entry for `https://hefestoai.narapallc.com/api/mcp-core` (tools: `analyze`, `install`), a terms-of-service listing URL, and five positive plus three negative review cases. The listing name stays Hefesto Code Gate.
+- The OpenAI package ZIP includes a remote `mcp.json` entry for `https://hefestoai.narapallc.com/api/mcp-core` (tools: `analyze`, `install`), a terms-of-service listing URL, and five positive plus three negative review cases. `mcp.json` is injected at ZIP build time and is not kept in the plugin folder. The listing name stays Hefesto Code Gate.
+
+### Changed
+
+- One default listing prompt is written for ChatGPT without a local repository. Negative review cases now state why the plugin should not act and the expected refusal or safe fallback; the third case is a request to scan a GitHub repository URL on the hosted analyzer.
 
 ## [1.0.2]
 

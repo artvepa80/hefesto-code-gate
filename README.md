@@ -18,7 +18,7 @@ A single plugin, [`plugins/hefesto-code-gate/`](plugins/hefesto-code-gate/), tha
 
 The skills are built on the open-source [`hefesto-ai`](https://pypi.org/project/hefesto-ai/) CLI from PyPI, developed at [github.com/artvepa80/Agents-Hefesto](https://github.com/artvepa80/Agents-Hefesto). The skills themselves do not analyze code; they tell the agent how to run the CLI and act on its output.
 
-The OpenAI plugin package also references a hosted analyzer in [`plugins/hefesto-code-gate/mcp.json`](plugins/hefesto-code-gate/mcp.json) (`https://hefestoai.narapallc.com/api/mcp-core`). Its `analyze` tool runs the same open-source engine on files you send (up to 20 files, 100 KB each, 256 KB total; files are deleted after the run). For a whole repository, run the CLI locally. Its `install` tool returns local install commands and does not install anything on the caller's machine.
+The OpenAI plugin package (the ZIP built by `scripts/gen_manifests.py --codex-zip`) also references a hosted analyzer at `https://hefestoai.narapallc.com/api/mcp-core`. Its `analyze` tool runs the same open-source engine on files you send (up to 20 files, 100 KB each, 256 KB total; files are deleted after the run). For a whole repository, run the CLI locally. Its `install` tool returns local install commands and does not install anything on the caller's machine. That remote reference is injected into the ZIP as `mcp.json` and is not kept in the plugin folder used by the Claude directory.
 
 ## Install
 
@@ -60,7 +60,7 @@ The `hefesto-ai` CLI sends usage telemetry by default. The skills show this noti
 
 ## Maintaining
 
-- `python3 scripts/gen_manifests.py` regenerates the platform manifests (including `mcp.json` for the OpenAI package), the notice copies and the Codex ZIP (`--codex-zip`). `--check` fails on any drift.
+- `python3 scripts/gen_manifests.py` regenerates the platform manifests, the notice copies and the Codex/OpenAI ZIP (`--codex-zip`, which injects `mcp.json`). `--check` fails on any drift.
 - `--resolve-pins` resolves pinned action tags to commit SHAs (dereferencing annotated tags).
 - `--sync-references` copies engine docs at the CLI floor version.
 - `python3 scripts/public_audit.py` checks that nothing private is about to be published. It runs in CI and can run as a pre-push hook: `ln -s ../../scripts/public_audit.py .git/hooks/pre-push`.

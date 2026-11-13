@@ -9,7 +9,7 @@ Usage:
   python3 scripts/gen_manifests.py --resolve-pins      # network: resolve action tags to commits
   python3 scripts/gen_manifests.py --sync-references   # network: copy engine docs at the CLI floor
   python3 scripts/gen_manifests.py --codex-zip dist/x.zip  # build the OpenAI upload ZIP
-                                                          # (plugin.json, mcp.json, skills, assets)
+                                                          # (plugin.json, injected mcp.json, skills, assets)
 
 Rules checked: skill name == folder name and matches the Agent Skills pattern,
 description 1..1024 chars written as a single-line YAML scalar, metadata.version
@@ -35,6 +35,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 NAME_RE = re.compile(r"^(?!.*--)[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$")
 AP_SCHEMA = "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json"
+MCP_SCHEMA = "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json"
 
 
 def dump(obj) -> str:
@@ -88,6 +89,23 @@ def render_notice(text: str, block: str) -> str:
     if not pat.search(text):
         raise ValueError("telemetry-notice markers missing")
     return pat.sub(lambda _m: NOTICE_START + "\n" + block + NOTICE_END, text)
+
+
+def mcp_manifest(src: dict) -> dict:
+    """Return the OpenAI/Codex mcp.json document. It is injected into the ZIP
+    only; it is not written into the plugin folder that the Claude directory
+    scans.
+    """
+    mcp = src["plugin"]["mcp"]
+    return {
+        "$schema": MCP_SCHEMA,
+        "mcpServers": {
+            mcp["name"]: {
+                "type": mcp["type"],
+                "url": mcp["url"],
+            }
+        },
+    }
 
 
 def build(src: dict) -> dict[str, str]:
@@ -146,19 +164,6 @@ def build(src: dict) -> dict[str, str]:
         openai_ext["review"] = review
     files[pdir + "/plugin.json"] = dump({"$schema": AP_SCHEMA, **common,
                                         "extensions": {"com.openai": openai_ext}})
-    if p.get("mcp"):
-        mcp = p["mcp"]
-        # This hosted endpoint is unauthenticated; the OpenAI portable
-        # format records that as auth.type "none" (not a credential).
-        entry = {
-            "type": mcp["type"],
-            "url": mcp["url"],
-            "extensions": {"com.openai": {"auth": {"type": "none"}}},
-        }
-        files[pdir + "/mcp.json"] = dump({
-            "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
-            "mcpServers": {mcp["name"]: entry},
-        })
     block = notice(src)
     targets = [f"{pdir}/skills/{sk}/SKILL.md" for sk in NOTICE_SKILLS] + ["README.md", f"{pdir}/README.md"]
     for rel_s in targets:
@@ -207,7 +212,7 @@ def _check_review_cases(review: dict) -> list[str]:
         errs.append(f"review.test_cases.negative must have 3 cases, got {len(neg)}")
     return (errs
             + _missing_case_fields(pos, ("description", "prompt", "tools_triggered", "expected_behavior"), "positive")
-            + _missing_case_fields(neg, ("description", "prompt"), "negative"))
+            + _missing_case_fields(neg, ("description", "prompt", "expected_behavior"), "negative"))
 
 
 def _check_mcp_and_review(src: dict) -> list[str]:
@@ -223,12 +228,25 @@ def _check_mcp_and_review(src: dict) -> list[str]:
     if not mcp.get("name"):
         errs.append("mcp.name is required")
     if "auth_type" in mcp or "auth" in mcp:
-        errs.append("mcp must not store an auth field; unauthenticated access is fixed in gen_manifests")
+        errs.append("mcp must not store an auth field; no-auth is the schema default and is set in the portal")
     if not _https_ok(p.get("terms_of_service_url") or ""):
         errs.append("terms_of_service_url must be HTTPS and at most 1024 characters")
     if not review:
         return errs + ["review is required when mcp is set"]
-    return errs + _check_review_cases(review)
+    return errs + _check_mcp_kept_out_of_plugin(ROOT / p["dir"]) + _check_review_cases(review)
+
+
+def _check_mcp_kept_out_of_plugin(pdir: Path) -> list[str]:
+    errs = []
+    if (pdir / "mcp.json").exists():
+        errs.append("mcp.json must not be in the plugin folder; the OpenAI ZIP injects it at build time")
+    claude_path = pdir / ".claude-plugin" / "plugin.json"
+    if not claude_path.is_file():
+        return errs
+    claude = claude_path.read_text()
+    if "mcp-core" in claude or "mcpServers" in claude:
+        errs.append(".claude-plugin/plugin.json must not reference a remote MCP server")
+    return errs
 
 
 def _check_plugin_files(pdir: Path) -> list[str]:
@@ -346,12 +364,16 @@ def sync_references(src: dict) -> None:
 
 def codex_zip(src: dict, out: Path) -> None:
     """ZIP of the plugin folder for the OpenAI upload, without the Claude/Cursor-only
-    `disable-model-invocation` key (Codex reads agents/openai.yaml instead)."""
+    `disable-model-invocation` key (Codex reads agents/openai.yaml instead).
+
+    mcp.json is injected here and is not kept in the plugin folder, so the
+    Claude directory scan does not list a remote server.
+    """
     pdir = ROOT / src["plugin"]["dir"]
     out.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
         for f in sorted(pdir.rglob("*")):
-            if not f.is_file():
+            if not f.is_file() or f.name == "mcp.json":
                 continue
             info = zipfile.ZipInfo(f.relative_to(pdir).as_posix(), date_time=(2026, 1, 1, 0, 0, 0))
             info.compress_type = zipfile.ZIP_DEFLATED
@@ -362,6 +384,10 @@ def codex_zip(src: dict, out: Path) -> None:
                 fm = re.sub(r"(?m)^disable-model-invocation:.*\n", "", m.group(1))
                 data = ("---\n" + fm + "---\n" + text[m.end():]).encode()
             z.writestr(info, data)
+        if src["plugin"].get("mcp"):
+            info = zipfile.ZipInfo("mcp.json", date_time=(2026, 1, 1, 0, 0, 0))
+            info.compress_type = zipfile.ZIP_DEFLATED
+            z.writestr(info, dump(mcp_manifest(src)).encode())
     print(f"wrote {out}")
 
 
