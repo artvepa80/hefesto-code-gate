@@ -18,7 +18,7 @@ A single plugin, [`plugins/hefesto-code-gate/`](plugins/hefesto-code-gate/), tha
 
 The skills are built on the open-source [`hefesto-ai`](https://pypi.org/project/hefesto-ai/) CLI from PyPI, developed at [github.com/artvepa80/Agents-Hefesto](https://github.com/artvepa80/Agents-Hefesto). The skills themselves do not analyze code; they tell the agent how to run the CLI and act on its output.
 
-The OpenAI plugin package (the ZIP built by `scripts/gen_manifests.py --codex-zip`) also references a hosted analyzer at `https://hefestoai.narapallc.com/api/mcp-core`. Its `analyze` tool runs the same open-source engine on files you send (up to 20 files, 100 KB each, 256 KB total; files are deleted after the run). For a whole repository, run the CLI locally. Its `install` tool returns local install commands and does not install anything on the caller's machine. That remote reference is injected into the ZIP as `mcp.json` and is not kept in the plugin folder used by the Claude directory.
+The OpenAI plugin package (the ZIP built by `scripts/gen_manifests.py --codex-zip`) also references a hosted analyzer at `https://hefestoai.narapallc.com/api/mcp-core`. Its `analyze` tool runs the same open-source engine on files you send (up to 20 files, 100 KB each, 256 KB total; files are deleted after the run). For a whole repository, run the CLI locally. Its `get_install_instructions` tool returns local install commands (the pinned `hefesto-ai>=4.20.4,<5` venv command) and does not install anything on the caller's machine. That remote reference is injected into the ZIP as `mcp.json` and is not kept in the plugin folder used by the Claude directory.
 
 ## Install
 

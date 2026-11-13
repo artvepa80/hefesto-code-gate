@@ -25,7 +25,7 @@
       "interface": {
         "displayName": "Hefesto Code Gate",
         "shortDescription": "Real findings, verified fixes",
-        "longDescription": "Runs the open-source HefestoAI CLI (hefesto-ai on PyPI) locally on a pull request, a diff or a whole repository. Each HIGH or CRITICAL finding is checked against the surrounding code and labeled real, doubtful or false positive with a reason. Real findings can be fixed with a minimal patch that is re-verified with the CLI and the repo's tests. Also prepares a GitHub Actions workflow for CI. In ChatGPT and Codex, the plugin also connects to a hosted analyzer: the analyze tool runs the same open-source engine on files the user sends (up to 20 files, 100 KB each, 256 KB total; files are deleted after the run) and the install tool returns local install commands without changing the caller's machine. For a whole repository, run the CLI locally. Limits: no style review; no XSS, package-existence or dependency (SCA) checks; nothing is pushed or posted without the user's yes. The CLI sends usage events to PostHog by default (a random install ID, no code, paths or findings) and checks pypi.org for updates; the setup skill shows how to turn this off before the first run.",
+        "longDescription": "Runs the open-source HefestoAI CLI (hefesto-ai on PyPI) locally on a pull request, a diff or a whole repository. Each HIGH or CRITICAL finding is checked against the surrounding code and labeled real, doubtful or false positive with a reason. Real findings can be fixed with a minimal patch that is re-verified with the CLI and the repo's tests. Also prepares a GitHub Actions workflow for CI. In ChatGPT and Codex, the plugin also connects to a hosted analyzer: the analyze tool runs the same open-source engine on files the user sends (up to 20 files, 100 KB each, 256 KB total; files are deleted after the run) and the get_install_instructions tool returns local install commands (the pinned hefesto-ai>=4.20.4,<5 venv command) without changing the caller's machine. For a whole repository, run the CLI locally. Limits: no style review; no XSS, package-existence or dependency (SCA) checks; nothing is pushed or posted without the user's yes. The CLI sends usage events to PostHog by default (a random install ID, no code, paths or findings) and checks pypi.org for updates; the setup skill shows how to turn this off before the first run.",
         "developerName": "Narapa LLC",
         "category": "Developer Tools",
         "capabilities": [],
@@ -78,8 +78,8 @@
             {
               "description": "Return local install commands for a whole-repository run",
               "prompt": "I want to run Hefesto on my whole repository. How do I install it locally?",
-              "tools_triggered": "install",
-              "expected_behavior": "Calls install and returns local install commands for the open-source package (Python 3.11+, pip install hefesto-ai). It does not install anything on the caller's machine and does not analyze a whole repository on the hosted analyzer."
+              "tools_triggered": "get_install_instructions",
+              "expected_behavior": "Calls get_install_instructions and returns local install commands for the open-source package, including the pinned venv command `python3 -m venv ~/.hefesto-venv && ~/.hefesto-venv/bin/pip install \"hefesto-ai>=4.20.4,<5\"` and Python 3.11+. It does not install anything on the caller's machine and does not analyze a whole repository on the hosted analyzer."
             }
           ],
           "negative": [
