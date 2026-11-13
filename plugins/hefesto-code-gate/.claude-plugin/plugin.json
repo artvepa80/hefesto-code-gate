@@ -1,7 +1,7 @@
 {
   "name": "hefesto-code-gate",
   "displayName": "Hefesto Code Gate",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Run the open-source HefestoAI CLI on a PR, diff or repo, triage each finding against the code, fix the real ones with proof, and add the gate to CI.",
   "author": {
     "name": "Narapa LLC",

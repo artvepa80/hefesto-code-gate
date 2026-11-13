@@ -40,7 +40,7 @@ jobs:
           fi
       - name: Agent Skills spec (one exact, scoped exception)
         run: |
-          pip install "skills-ref==0.1.1" "jsonschema==4.26.0"
+          pip install "skills-ref==0.1.1" "jsonschema==4.26.0" "pyyaml"
           # Only these two skills may carry disable-model-invocation (a Claude Code /
           # Cursor key the strict validator rejects). Their only allowed error is
           # this exact line. Any other error, or this one anywhere else, fails.
@@ -58,6 +58,8 @@ jobs:
             rc=1
           done
           exit $rc
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests -v
       - name: Codex ZIP (key stripped) passes the strict validator with no exception
         run: |
           python3 scripts/gen_manifests.py --codex-zip dist/hefesto-code-gate-codex.zip

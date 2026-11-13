@@ -11,12 +11,14 @@ Usage:
   python3 scripts/gen_manifests.py --codex-zip dist/x.zip  # build the OpenAI upload ZIP
 
 Rules checked: skill name == folder name and matches the Agent Skills pattern,
-description 1..1024 chars, metadata.version == source version, README in the
-plugin folder has >= 40 words outside code blocks, LICENSE present there,
-every interface limit OpenAI documents for submission, the CLI pin text
-in each SKILL.md equals cli_requirement, the telemetry notice copies match
-docs/telemetry-notice.md, copied references carry the CLI floor version, and
-every pinned action SHA in skills and workflows is the recorded commit.
+description 1..1024 chars written as a single-line YAML scalar, metadata.version
+== source version, README in the plugin folder has >= 40 words outside code
+blocks, LICENSE present there, every interface limit OpenAI documents for
+submission, the CLI pin text in each SKILL.md equals cli_requirement, the
+telemetry notice copies match docs/telemetry-notice.md, copied references
+carry the CLI floor version, every pinned action SHA in skills and workflows
+is the recorded commit, and the plugin directory ships only file types
+Anthropic's plugin directory accepts from organizations that are not Verified.
 """
 from __future__ import annotations
 
@@ -107,10 +109,10 @@ def build(src: dict) -> dict[str, str]:
     files[".cursor-plugin/marketplace.json"] = dump({
         "name": m["cursor_name"], "owner": {"name": m["owner"]},
         "description": p["description"], "version": v,
-        "logo": pdir + "/assets/logo.svg",
+        "logo": pdir + "/assets/logo.png",
         "metadata": {"description": m["description"], "version": v},
         "plugins": [{"name": p["name"], "source": pdir, "description": p["description"],
-                     "version": v, "logo": "assets/logo.svg", "category": p["category"]}],
+                     "version": v, "logo": "assets/logo.png", "category": p["category"]}],
     })
     common = {"name": p["name"], "version": v, "description": p["description"],
               "author": p["author"], "homepage": p["repository"], "repository": p["repository"],
@@ -168,8 +170,21 @@ def _check_plugin_files(pdir: Path) -> list[str]:
         errs = [f"plugin README has {words} words outside code (< 40)"] if words < 40 else []
     if not (pdir / "LICENSE").is_file():
         errs.append("plugin LICENSE missing")
-    errs += [f"assets/{k} missing" for k in ("logo.png", "logo.svg", "icon.png")
+    errs += [f"assets/{k} missing" for k in ("logo.png", "icon.png")
              if not (pdir / "assets" / k).is_file()]
+    return errs
+
+
+def _check_description(folder: str, body: str, desc: str) -> list[str]:
+    raw_desc = next((ln[len("description:"):].strip() for ln in body.splitlines()
+                     if ln.startswith("description:")), "")
+    errs = []
+    if raw_desc in (">-", ">", "|", "|+", "|-", ">+"):
+        errs.append(f"{folder}: description must be a single-line YAML scalar")
+    if "\n" in desc:
+        errs.append(f"{folder}: description must not contain newlines")
+    if not 0 < len(desc) <= 1024:
+        errs.append(f"{folder}: description length {len(desc)}")
     return errs
 
 
@@ -180,8 +195,7 @@ def _check_skill(path: Path, version: str, cli_req: str) -> list[str]:
     errs = []
     if name != folder or not NAME_RE.match(name):
         errs.append(f"{folder}: name {name!r} must equal folder and match pattern")
-    if not 0 < len(desc) <= 1024:
-        errs.append(f"{folder}: description length {len(desc)}")
+    errs += _check_description(folder, body, desc)
     if fm.get("_meta", {}).get("version") != version:
         errs.append(f"{folder}: metadata.version != {version}")
     if "pip install" in body and cli_req not in body:
@@ -218,7 +232,9 @@ def checks(src: dict, tag: str | None) -> list[str]:
     errs = _check_interface(src, tag) + _check_plugin_files(pdir) + ([] if skills else ["no skills found"])
     for s in skills:
         errs += _check_skill(s, src["version"], src["cli_requirement"])
-    return errs + _check_release_inputs(src, tag) + _check_refs_and_pins(src)
+    from check_plugin_file_types import collect_findings
+    return (errs + _check_release_inputs(src, tag) + _check_refs_and_pins(src)
+            + collect_findings(pdir))
 
 
 def resolve_pins(src: dict) -> None:

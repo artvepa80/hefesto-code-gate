@@ -63,8 +63,9 @@ The `hefesto-ai` CLI sends usage telemetry by default. The skills show this noti
 - `--sync-references` copies engine docs at the CLI floor version.
 - `python3 scripts/public_audit.py` checks that nothing private is about to be published. It runs in CI and can run as a pre-push hook: `ln -s ../../scripts/public_audit.py .git/hooks/pre-push`.
 - The audit also fails on any path under `docs/worklog/`, any file or folder named like a worklog or handoff, and any landing page source folder.
+- `python3 scripts/check_plugin_file_types.py` checks that the plugin directory only ships file types accepted by both the [public pre-submission checklist](https://claude.com/docs/plugins/pre-submission-checklist) and the directory portal policy for organizations that are not Verified (Markdown, text, JSON, YAML, and PNG, JPEG, GIF or WebP images; `LICENSE` by exact name; no shebang files or package-manager config). `gen_manifests.py --check` runs the same check.
 
-CI pins Claude Code 2.1.308 and runs `claude plugin validate --strict` on the plugin and on the marketplace root, with no warnings tolerated. The directory-listing fields in `.claude-plugin/plugin.json` follow the [official plugins reference](https://code.claude.com/docs/en/plugins-reference#directory-listing-fields). Passing `--strict` locally does not guarantee that a directory portal's own validation will pass.
+CI pins Claude Code 2.1.308 and runs `claude plugin validate --strict` on the plugin and on the marketplace root, with no warnings tolerated. The directory-listing fields in `.claude-plugin/plugin.json` follow the [official plugins reference](https://code.claude.com/docs/en/plugins-reference#directory-listing-fields). Passing `--strict` locally does not guarantee that a directory portal's own validation will pass. The directory also applies a file-type policy that `--strict` does not cover; `scripts/check_plugin_file_types.py` checks the shipped-file part of that policy.
 
 ## License
 
