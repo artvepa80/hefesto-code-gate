@@ -81,7 +81,7 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: "22"
-      - name: Claude plugin validate --strict (Claude Code 2.1.308, pinned)
+      - name: Claude plugin validate --strict (Claude Code 2.1.330, pinned)
         run: |
           # Anthropic's directory reads icon, documentationUrl, supportUrl and
           # privacyPolicyUrl from .claude-plugin/plugin.json for the listing:
@@ -90,9 +90,10 @@ jobs:
           #   https://code.claude.com/docs/en/plugins-reference#fields
           #   https://code.claude.com/docs/en/plugins-reference#validate-the-manifest
           # Claude Code v2.1.281+ no longer reports those fields as unknown, so
-          # --strict passes. We run Node 22. Re-check
-          # --strict on every Claude Code version bump.
-          npm install -g @anthropic-ai/claude-code@2.1.308
+          # --strict passes. Claude Code 2.1.330 declares "node": ">=22.0.0" in its
+          # npm engines, so this job runs Node 22. Re-check --strict on every
+          # Claude Code version bump before raising the pin.
+          npm install -g @anthropic-ai/claude-code@2.1.330
           claude --version
           claude plugin validate --strict ./plugins/hefesto-code-gate
           claude plugin validate --strict .
